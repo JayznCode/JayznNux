@@ -1,8 +1,0 @@
-# 실행 파일들 (확장자 없는 파일들 무시)
-baseball
-logic_01
-guard
-array
-# 혹은 패턴으로 무시 (필요시)
-*.o
-.DS_Store
