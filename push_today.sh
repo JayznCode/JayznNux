@@ -1,57 +1,61 @@
 #!/bin/bash
 
-# 색상 및 스타일 정의
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-CYAN='\033[0;36m'
-YELLOW='\033[1;33m'
-BOLD='\033[1m'
-NC='\033[0m'
+# [설정] 로그 파일 위치
+LOG_FILE="git_sync.log"
 
-# 해커 느낌의 로딩 애니메이션 함수
+# 색상 정의
+GREEN='\033[0;32m'; RED='\033[0;31m'; CYAN='\033[0;36m'; YELLOW='\033[1;33m'; NC='\033[0m'
+
+# [기능 1] 유연성: 입력값이 없으면 기본값(master) 사용
+BRANCH=${1:-master}
+
+# 로딩 애니메이션 함수 (기존과 동일)
 loading_bar() {
-    local duration=${1}
-    already_done() { for ((i=0; i<$done; i++)); do printf "━"; done }
-    remaining() { for ((i=$done; i<$total; i++)); do printf " "; done }
-    
-    total=20
-    for ((done=0; done<=$total; done++)); do
-        printf "\r  [${CYAN}$(already_done)${NC}$(remaining)] %d%%" $((done*100/total))
-        sleep $duration
+    total=20; done=0
+    for ((i=0; i<=$total; i++)); do
+        printf "\r  [${CYAN}%${i}s${NC}]" "" 
+        sleep 0.03
     done
     echo ""
 }
 
-clear
-echo -e "${GREEN}${BOLD}=========================================="
-echo -e "   [SYSTEM STATUS: INITIALIZING SYNC]    "
-echo -e "   [USER: JAEJIN LEE / BRADY]           "
-echo -e "   [TIME: $(date)]                       "
-echo -e "==========================================${NC}\n"
+# 에러 로그 함수 (핵심 20% 추가)
+log_error() {
+    echo -e "${RED}[ERROR] $(date): $1${NC}" | tee -a "$LOG_FILE"
+}
 
-# 1. 저장소 체크
+clear
+echo -e "${CYAN}=== SYSTEM SYNC: BRANCH [$BRANCH] ===${NC}"
+
+# 1. 저장소 확인
 if [ ! -d ".git" ]; then
-    echo -e "${RED}[!] ERROR: GIT REPOSITORY NOT FOUND.${NC}"
+    log_error "Not a git repository."
     exit 1
 fi
 
-# 2. 단계별 실행 (애니메이션 적용)
-echo -e "${YELLOW}>> STAGING FILES...${NC}"
-loading_bar 0.05
+# 2. Add
+echo -ne "${YELLOW}>> Staging...${NC}"
 git add . > /dev/null 2>&1
-echo -e "${GREEN}✔ STAGE COMPLETE${NC}\n"
+if [ $? -ne 0 ]; then log_error "git add failed"; exit 1; fi
+echo -e "${GREEN} OK${NC}"
 
-echo -e "${YELLOW}>> COMMITTING CHANGES...${NC}"
-loading_bar 0.08
+# 3. Commit
+echo -ne "${YELLOW}>> Committing...${NC}"
 git commit -m "Auto-backup: $(date +'%Y-%m-%d %H:%M:%S')" > /dev/null 2>&1
-echo -e "${GREEN}✔ COMMIT SUCCESS${NC}\n"
+# 커밋할 게 없어서 실패하는 경우는 에러로 간주하지 않기 위해 별도 처리
+if [ $? -ne 0 ]; then
+    echo -e "${CYAN} (No changes to commit)${NC}"
+else
+    echo -e "${GREEN} OK${NC}"
+fi
 
-echo -e "${YELLOW}>> PUSHING TO REMOTE SERVER...${NC}"
-loading_bar 0.1
-git push origin master > /dev/null 2>&1
-echo -e "${GREEN}✔ PUSH SUCCESSFUL${NC}\n"
+# 4. Push (유연성 적용)
+echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
+loading_bar
+git push origin "$BRANCH" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    log_error "git push to $BRANCH failed. Check network or permissions."
+    exit 1
+fi
 
-# 최종 승리 메시지
-echo -e "${BOLD}${CYAN}******************************************"
-echo -e "  SYNC COMPLETE: ALL GRASS PLANTED!      "
-echo -e "******************************************${NC}\n"
+echo -e "${GREEN}${BOLD}=== SYNC COMPLETE: BRANCH [$BRANCH] ===${NC}\n"
