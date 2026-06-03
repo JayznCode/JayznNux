@@ -10,7 +10,7 @@ GREEN='\033[0;32m'; RED='\033[0;31m'; CYAN='\033[0;36m'; YELLOW='\033[1;33m'; NC
 BRANCH=${1:-master}
 
 # 로딩 애니메이션 함수 (기존과 동일)
-loading_bar() {
+show_progress() {
     total=20; done=0
     for ((i=0; i<=$total; i++)); do
         printf "\r  [${CYAN}%${i}s${NC}]" "" 
