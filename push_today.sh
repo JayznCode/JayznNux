@@ -51,8 +51,28 @@ fi
 
 # 4. Push (유연성 적용)
 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
-loading_bar
-git push origin "$BRANCH" > /dev/null 2>&1
+#!/bin/bash
+
+# 1. 함수 정의 (스크립트 상단에 배치)
+loading_bar() {
+    local count=0
+    echo -ne " ["
+    while [ $count -lt 20 ]; do
+        echo -ne "#"
+        sleep 0.1
+        count=$((count+1))
+    done
+    echo -ne "] Done!"
+    echo
+}
+
+# ... (중략: 다른 코드들) ...
+
+# 52 # 4. Push (유연성 적용)
+# 53 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
+# 54 loading_bar      <-- 여기서 호출!
+# 55 git push origin "$BRANCH" > /dev/null 2>&1
+# ... (이하 생략)git push origin "$BRANCH" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     log_error "git push to $BRANCH failed. Check network or permissions."
     exit 1
