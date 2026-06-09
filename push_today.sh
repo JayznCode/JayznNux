@@ -52,7 +52,7 @@ fi
 # 4. Push (유연성 적용)
 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
 show_progress
-git push origin "$BRANCH" > /dev/null 2>&1
+git push origin "$BRANCH" 
 if [ $? -ne 0 ]; then
     log_error "git push to $BRANCH failed. Check network or permissions."
     exit 1
