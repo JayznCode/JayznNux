@@ -51,7 +51,7 @@ fi
 
 # 4. Push (유연성 적용)
 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
-loading_bar
+my_loading_bar
 git push origin "$BRANCH" > /dev/null 2>&1
 if [ $? -ne 0 ]; then
     log_error "git push to $BRANCH failed. Check network or permissions."
