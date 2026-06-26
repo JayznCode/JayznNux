@@ -53,13 +53,15 @@ fi
 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
 
 # progress.py
-python3 -
+python3 - <<'EOF'
 from tqdm import tqdm
 import time
 
 
 for i in tqdm(range(20), desc="Processing"):
     time.sleep(0.05)
+
+EOF
 
 <<<<<<< HEAD
 #!/bin/bash
