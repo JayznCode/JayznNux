@@ -53,8 +53,11 @@ fi
 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
 
 # progress.py
+python3 -
 from tqdm import tqdm
 import time
+
+
 for i in tqdm(range(20), desc="Processing"):
     time.sleep(0.05)
 
@@ -79,6 +82,7 @@ loading_bar() {
 # 52 # 4. Push (유연성 적용)
 # 53 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
 # 54 loading_bar      <-- 여기서 호출!
+
 # 55 git push origin "$BRANCH" > /dev/null 2>&1
 # ... (이하 생략)git push origin "$BRANCH" > /dev/null 2>&1
 =======
