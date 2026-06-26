@@ -63,37 +63,25 @@ for i in tqdm(range(20), desc="Processing"):
 
 EOF
 
-<<<<<<< HEAD
-#!/bin/bash
+# 4. Push 부분
+echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
 
-# 1. 함수 정의 (스크립트 상단에 배치)
-loading_bar() {
-    local count=0
-    echo -ne " ["
-    while [ $count -lt 20 ]; do
-        echo -ne "#"
-        sleep 0.1
-        count=$((count+1))
-    done
-    echo -ne "] Done!"
-    echo
-}
+# 파이썬 진행바 실행
+python3 - <<'EOF'
+from tqdm import tqdm
+import time
+for i in tqdm(range(20), desc="Pushing"):
+    time.sleep(0.05)
+EOF
 
-# ... (중략: 다른 코드들) ...
+# Git 실제 푸시 실행 (기존 로직 유지)
+git push origin "$BRANCH" > /dev/null 2>&1
 
-# 52 # 4. Push (유연성 적용)
-# 53 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
-# 54 loading_bar      <-- 여기서 호출!
-
-# 55 git push origin "$BRANCH" > /dev/null 2>&1
-# ... (이하 생략)git push origin "$BRANCH" > /dev/null 2>&1
-=======
-show_progress
-git push origin "$BRANCH" 
->>>>>>> fbe2e527a9a868098de6e3b0a92de59fccbe295f
+# 푸시 결과 확인 (이 로직이 핵심입니다!)
 if [ $? -ne 0 ]; then
     log_error "git push to $BRANCH failed. Check network or permissions."
     exit 1
 fi
 
-echo -e "${GREEN}${BOLD}=== SYNC COMPLETE: BRANCH [$BRANCH] ===${NC}\n"
+echo -e "${GREEN} OK${NC}\n"
+echo -e "${GREEN}=== SYNC COMPLETE: BRANCH [$BRANCH] ===${NC}\n"
