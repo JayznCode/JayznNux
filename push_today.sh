@@ -51,6 +51,13 @@ fi
 
 # 4. Push (유연성 적용)
 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
+
+# progress.py
+from tqdm import tqdm
+import time
+for i in tqdm(range(20), desc="Processing"):
+    time.sleep(0.05)
+
 <<<<<<< HEAD
 #!/bin/bash
 
