@@ -1,0 +1,6 @@
+import os
+
+# 현재 디렉토리 목록을 가져옴
+files = os.listdir('.')
+for file in files:
+    print(file)

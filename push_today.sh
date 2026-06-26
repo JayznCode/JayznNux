@@ -51,6 +51,7 @@ fi
 
 # 4. Push (유연성 적용)
 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
+<<<<<<< HEAD
 #!/bin/bash
 
 # 1. 함수 정의 (스크립트 상단에 배치)
@@ -73,6 +74,10 @@ loading_bar() {
 # 54 loading_bar      <-- 여기서 호출!
 # 55 git push origin "$BRANCH" > /dev/null 2>&1
 # ... (이하 생략)git push origin "$BRANCH" > /dev/null 2>&1
+=======
+show_progress
+git push origin "$BRANCH" 
+>>>>>>> fbe2e527a9a868098de6e3b0a92de59fccbe295f
 if [ $? -ne 0 ]; then
     log_error "git push to $BRANCH failed. Check network or permissions."
     exit 1
