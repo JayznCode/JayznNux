@@ -1,10 +1,14 @@
-# 실행 파일들 (확장자 없는 파일들 무시)
 baseball
 logic_01
 guard
 array
-# 혹은 패턴으로 무시 (필요시)
+my_cat
+my_dmesg
+my_ls
+my_ls_p
+student_manager
+student_manager_fix
 *.o
-.DS_Store
-git_sync.log
+*.out
+.Ds_Store
 git_sync.log
