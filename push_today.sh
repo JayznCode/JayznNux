@@ -41,13 +41,15 @@ echo -e "${GREEN} OK${NC}"
 
 # 2-1 Commit Message Input (추가된 부분)
 echo -e "${CYAN}>> Enter Commit message:${NC}"
-read -p "> " UESR_MSG
+read -r UESR_MSG < /dev/tty
 echo "" # 줄바꿈
 
+#입력 받은 메세지가 있으면 사용, 없으면 자동 백업 메시지 사용
+
 if [ -z "$USER_MSG" ]; then
-    COMIT_MSG="Auto-backup: $(date +'%Y-%m-%d %H:%M:%S')"
-else
     COMMIT_MSG="$USER_MSG"
+else
+    COMMIT_MSG="Auto-backup: $(date +'%Y-%m-%d %H:%M:%S')"
 fi
 
 # 3. Commit
