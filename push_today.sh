@@ -39,6 +39,17 @@ git add . > /dev/null 2>&1
 if [ $? -ne 0 ]; then log_error "git add failed"; exit 1; fi
 echo -e "${GREEN} OK${NC}"
 
+# 2-1 Commit Message Input (추가된 부분)
+echo -e "${CYAN}>> Enter Commit message:${NC}"
+read -t 5 -p "> " UESR_MSG
+echo "" # 줄바꿈
+
+if [ -z "$USER_MSG" ]; then
+    COMIT_MSG="Auto-backup: $(date +'%Y-%m-%d %H:%M:%S')"
+else
+    COMMIT_MSG="$USER_MSG"
+fi
+
 # 3. Commit
 echo -ne "${YELLOW}>> Committing...${NC}"
 git commit -m "Auto-backup: $(date +'%Y-%m-%d %H:%M:%S')" > /dev/null 2>&1
