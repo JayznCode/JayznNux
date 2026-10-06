@@ -41,7 +41,7 @@ echo -e "${GREEN} OK${NC}"
 
 # 2-1 Commit Message Input (추가된 부분)
 echo -e "${CYAN}>> Enter Commit message:${NC}"
-read -t 5 -p "> " UESR_MSG
+read -p "> " UESR_MSG
 echo "" # 줄바꿈
 
 if [ -z "$USER_MSG" ]; then
