@@ -39,29 +39,27 @@ git add . > /dev/null 2>&1
 if [ $? -ne 0 ]; then log_error "git add failed"; exit 1; fi
 echo -e "${GREEN} OK${NC}"
 
-# 2-1 Commit Message Input (추가된 부분)
-echo -e "${CYAN}>> Enter Commit message:${NC}"
-read -r UESR_MSG < /dev/tty
+# 2-1 Commit Message Input
+echo -e "${CYAN}>> Enter Commit message (Press Enter for Auto-backup):${NC}"
+read -r USER_MSG < /dev/tty
 echo "" # 줄바꿈
 
-#입력 받은 메세지가 있으면 사용, 없으면 자동 백업 메시지 사용
-
-if [ -z "$USER_MSG" ]; then
+# 입력받은 메시지가 있으면 사용, 없으면 자동 백업 메시지 사용
+if [ -n "$USER_MSG" ]; then
     COMMIT_MSG="$USER_MSG"
 else
     COMMIT_MSG="Auto-backup: $(date +'%Y-%m-%d %H:%M:%S')"
 fi
 
 # 3. Commit
-echo -ne "${YELLOW}>> Committing...${NC}"
-git commit -m "Auto-backup: $(date +'%Y-%m-%d %H:%M:%S')" > /dev/null 2>&1
+echo -ne "${YELLOW}>> Committing [${COMMIT_MSG}]...${NC}"
+git commit -m "$COMMIT_MSG" > /dev/null 2>&1
 # 커밋할 게 없어서 실패하는 경우는 에러로 간주하지 않기 위해 별도 처리
 if [ $? -ne 0 ]; then
     echo -e "${CYAN} (No changes to commit)${NC}"
 else
     echo -e "${GREEN} OK${NC}"
 fi
-
 # 4. Push (유연성 적용)
 echo -ne "${YELLOW}>> Pushing to origin $BRANCH...${NC}"
 
