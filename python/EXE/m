@@ -1,0 +1,40 @@
+import sys
+import os
+import io
+from datetime import datetime
+
+# 터미널 입출력 인코딩 UTF-8 강제 지정
+sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8', errors='replace')
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+
+NOTE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "quick_notes.txt")
+
+def view_notes():
+    """저장된 메모 전체 조회"""
+    if not os.path.exists(NOTE_FILE) or os.path.getsize(NOTE_FILE) == 0:
+        print("📂 저장된 메모가 없습니다.")
+        return
+
+    print("=== 📝 저장된 메모 목록 ===")
+    with open(NOTE_FILE, "r", encoding="utf-8") as f:
+        print(f.read().strip())
+
+def save_note(content):
+    """메모 추가 저장"""
+    timestamp = datetime.now().strftime("[%Y-%m-%d %H:%M:%S]")
+    entry = f"{timestamp} {content}\n"
+
+    with open(NOTE_FILE, "a", encoding="utf-8") as f:
+        f.write(entry)
+
+    print(f"✅ 저장 완료: {content}")
+
+if __name__ == "__main__":
+    # 1. 인자가 있는 경우: 바로 저장 (예: python3 m.py "내용")
+    if len(sys.argv) > 1:
+        content = " ".join(sys.argv[1:])
+        save_note(content)
+    # 2. 인자가 없는 경우: 저장된 메모 목록 출력
+    else:
+        view_notes()
+
